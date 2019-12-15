@@ -57,14 +57,18 @@ export const Dashboard = () => {
   );
   const [sortType, setSortType] = useState(sortOptions.system_name);
   const [devicesData, setDevicesData] = useState([]);
+  const [getDataIndicator, setGetDataIndicator] = useState(true);
 
   useEffect(() => {
-    const getData = async () => {
-      const { data } = await axios("http://localhost:3000/devices");
-      setDevicesData(data);
-    };
-    getData();
-  }, []);
+    if (getDataIndicator) {
+      const getData = async () => {
+        const { data } = await axios("http://localhost:3000/devices");
+        setDevicesData(data);
+      };
+      getData();
+      setGetDataIndicator(false);
+    }
+  }, [getDataIndicator]);
 
   const sortedAndFilteredData = compose(
     sortType === sortOptions.hdd_capacity
@@ -94,7 +98,11 @@ export const Dashboard = () => {
                 <ListItemText>{`${item.hdd_capacity} GB`}</ListItemText>
               </div>
               <ListItemOptionsContainer>
-                <DeleteDevice />
+                <DeleteDevice
+                  id={item.id}
+                  systemName={item.system_name}
+                  setGetDataIndicator={setGetDataIndicator}
+                />
                 <EditDevice
                   id={item.id}
                   systemName={item.system_name}
