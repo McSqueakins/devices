@@ -58,6 +58,9 @@ export const Dashboard = () => {
   const [sortType, setSortType] = useState(sortOptions.system_name);
   const [devicesData, setDevicesData] = useState([]);
   const [getDataIndicator, setGetDataIndicator] = useState(true);
+  const [deviceTypeEditInput, setDeviceTypeEditInput] = useState("");
+  const [systemNameEditInput, setSystemNameEditInput] = useState("");
+  const [hddCapacityEditInput, setHddCapacityEditInput] = useState("");
 
   useEffect(() => {
     if (getDataIndicator) {
@@ -89,25 +92,29 @@ export const Dashboard = () => {
           sortType={sortType}
           setSortType={setSortType}
         />
-        {sortedAndFilteredData.map(item => {
+        {sortedAndFilteredData.map(device => {
           return (
-            <ListItem key={item.id}>
+            <ListItem key={device.id}>
               <div>
-                <ListItemText>{item.system_name}</ListItemText>
-                <ItemType>{types[item.type].displayValue}</ItemType>
-                <ListItemText>{`${item.hdd_capacity} GB`}</ListItemText>
+                <ListItemText>{device.system_name}</ListItemText>
+                <ItemType>{types[device.type].displayValue}</ItemType>
+                <ListItemText>{`${device.hdd_capacity} GB`}</ListItemText>
               </div>
               <ListItemOptionsContainer>
                 <DeleteDevice
-                  id={item.id}
-                  systemName={item.system_name}
+                  id={device.id}
+                  systemName={device.system_name}
                   setGetDataIndicator={setGetDataIndicator}
                 />
                 <EditDevice
-                  id={item.id}
-                  systemName={item.system_name}
-                  deviceType={item.type}
-                  hddCapacity={item.hdd_capacity}
+                  device={device}
+                  setGetDataIndicator={setGetDataIndicator}
+                  setSystemNameInput={setSystemNameEditInput}
+                  systemNameInput={systemNameEditInput}
+                  setDeviceTypeInput={setDeviceTypeEditInput}
+                  deviceTypeInput={deviceTypeEditInput}
+                  setHddCapacityInput={setHddCapacityEditInput}
+                  hddCapacityInput={hddCapacityEditInput}
                 />
               </ListItemOptionsContainer>
             </ListItem>

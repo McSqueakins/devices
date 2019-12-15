@@ -11,6 +11,8 @@ import TextField from "@material-ui/core/TextField";
 import { types } from "./constants";
 import MenuItem from "@material-ui/core/MenuItem";
 import styled from "styled-components";
+import { isEmpty } from "ramda";
+import axios from "axios";
 
 const InputRow = styled.div({
   display: "flex",
@@ -25,17 +27,31 @@ const TextFieldWithMargin = styled(TextField)({
   }
 });
 
-export const EditDevice = ({ id, systemName, deviceType, hddCapacity }) => {
+export const EditDevice = ({
+  device,
+  setGetDataIndicator,
+  setSystemNameInput,
+  systemNameInput,
+  setDeviceTypeInput,
+  deviceTypeInput,
+  setHddCapacityInput,
+  hddCapacityInput
+}) => {
   const [open, setOpen] = useState(false);
-  const [typeInput, setType] = useState(deviceType);
-  const [systemNameInput, setSystemNameInput] = useState(systemName);
-  const [hddCapacityInput, setHddCapacityInput] = useState(hddCapacity);
+
+  const formValidation =
+    isEmpty(systemNameInput) ||
+    isEmpty(deviceTypeInput) ||
+    isEmpty(hddCapacityInput);
 
   return (
     <>
       <IconButton
         color="primary"
         onClick={() => {
+          setDeviceTypeInput(device.type);
+          setSystemNameInput(device.system_name);
+          setHddCapacityInput(device.hdd_capacity);
           setOpen(true);
         }}
       >
@@ -63,9 +79,9 @@ export const EditDevice = ({ id, systemName, deviceType, hddCapacity }) => {
               required
               label="Type"
               select
-              value={typeInput}
+              value={deviceTypeInput}
               onChange={e => {
-                setType(e.target.value);
+                setDeviceTypeInput(e.target.value);
               }}
             >
               {Object.values(types).map(type => (
@@ -90,6 +106,9 @@ export const EditDevice = ({ id, systemName, deviceType, hddCapacity }) => {
         <DialogActions>
           <Button
             onClick={() => {
+              setSystemNameInput("");
+              setDeviceTypeInput("");
+              setHddCapacityInput("");
               setOpen(false);
             }}
             color="default"
@@ -97,7 +116,22 @@ export const EditDevice = ({ id, systemName, deviceType, hddCapacity }) => {
             Cancel
           </Button>
           <Button
-            onClick={() => {
+            disabled={formValidation}
+            onClick={async () => {
+              const { status } = await axios.put(
+                `http://localhost:3000/devices/${device.id}`,
+                {
+                  system_name: systemNameInput,
+                  type: deviceTypeInput,
+                  hdd_capacity: hddCapacityInput
+                }
+              );
+              if (status === 200) {
+                setGetDataIndicator(true);
+              }
+              setSystemNameInput("");
+              setDeviceTypeInput("");
+              setHddCapacityInput("");
               setOpen(false);
             }}
             color="primary"
