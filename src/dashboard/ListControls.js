@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { SvgIcon } from "@material-ui/core";
 import { OutsideClickHandler } from "./OutsideClickHandler";
 import { AddDevice } from "./AddDevice";
+import { types, sortOptions } from "./constants";
 
 const ActiveOptionsBox = styled.div({
   alignItems: "center",
@@ -53,17 +54,6 @@ const MenuOption = styled.li({
   margin: "2px"
 });
 
-const types = {
-  WINDOWS_WORKSTATION: "Windows Workstation",
-  WINDOWS_SERVER: "Windows Server",
-  MAC: "MAC"
-};
-
-const sortOptions = {
-  hddCapacity: "HDD Capacity",
-  systemName: "System Name"
-};
-
 export const ListControls = ({
   deviceTypeFilter,
   setDeviceTypeFilter,
@@ -81,7 +71,7 @@ export const ListControls = ({
               setFilterMenuOpen(!filterMenuOpen);
             }}
           >
-            Device Type: {deviceTypeFilter || "All"}
+            Device Type: {deviceTypeFilter?.displayValue ?? "All"}
             <SvgIcon>
               <path
                 fill="#000000"
@@ -99,12 +89,12 @@ export const ListControls = ({
                 </MenuOption>
                 {Object.values(types).map(type => (
                   <MenuOption
-                    key={type}
+                    key={type.typeName}
                     onClick={() => {
                       setDeviceTypeFilter(type);
                     }}
                   >
-                    {type}
+                    {type.displayValue}
                   </MenuOption>
                 ))}
               </OptionsMenu>

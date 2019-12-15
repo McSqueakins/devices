@@ -20,7 +20,8 @@ const InputRow = styled.div({
 
 const TextFieldWithMargin = styled(TextField)({
   "&&": {
-    marginLeft: "16px"
+    marginLeft: "16px",
+    width: "184px"
   }
 });
 
@@ -68,8 +69,8 @@ export const EditDevice = ({ id, systemName, deviceType, hddCapacity }) => {
               }}
             >
               {Object.values(types).map(type => (
-                <MenuItem key={type} value={type}>
-                  {type}
+                <MenuItem key={type.typeName} value={type.typeName}>
+                  {type.displayValue}
                 </MenuItem>
               ))}
             </TextFieldWithMargin>
