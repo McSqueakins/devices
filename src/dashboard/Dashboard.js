@@ -7,7 +7,6 @@ import {
   compose,
   ascend,
   prop,
-  sort,
   sortWith,
   sortBy,
   toUpper,
@@ -67,9 +66,6 @@ export const Dashboard = () => {
     getData();
   }, []);
 
-  console.log("devicesData");
-  console.log(devicesData);
-
   const sortedAndFilteredData = compose(
     sortType === sortOptions.hdd_capacity
       ? sortByHddCapacity
@@ -83,6 +79,7 @@ export const Dashboard = () => {
     <div>
       <ListContainer>
         <ListControls
+          setDevicesData={setDevicesData}
           deviceTypeFilter={deviceTypeFilter}
           setDeviceTypeFilter={setDeviceTypeFilter}
           sortType={sortType}

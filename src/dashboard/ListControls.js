@@ -56,6 +56,7 @@ const MenuOption = styled.li({
 
 export const ListControls = ({
   deviceTypeFilter,
+  setDevicesData,
   setDeviceTypeFilter,
   sortType,
   setSortType
@@ -132,7 +133,7 @@ export const ListControls = ({
         </OutsideClickHandler>
       </SortAndFilterContainer>
       <div>
-        <AddDevice />
+        <AddDevice setDevicesData={setDevicesData} />
       </div>
     </ListOptions>
   );

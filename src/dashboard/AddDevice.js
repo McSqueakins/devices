@@ -11,6 +11,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import styled from "styled-components";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import { isEmpty } from "ramda";
+import axios from "axios";
 
 const InputRow = styled.div({
   display: "flex",
@@ -25,11 +27,14 @@ const TextFieldWithMarginAndWidth = styled(TextField)({
   }
 });
 
-export const AddDevice = () => {
+export const AddDevice = ({ setDevicesData }) => {
   const [open, setOpen] = useState(false);
   const [typeInput, setTypeInput] = useState("");
   const [systemNameInput, setSystemNameInput] = useState("");
   const [hddCapacityInput, setHddCapacityInput] = useState("");
+
+  const formValidator =
+    isEmpty(typeInput) || isEmpty(systemNameInput) || isEmpty(hddCapacityInput);
 
   return (
     <>
@@ -73,8 +78,8 @@ export const AddDevice = () => {
               }}
             >
               {Object.values(types).map(type => (
-                <MenuItem key={type} value={type}>
-                  {type}
+                <MenuItem key={type.typeName} value={type.typeName}>
+                  {type.displayValue}
                 </MenuItem>
               ))}
             </TextFieldWithMarginAndWidth>
@@ -101,13 +106,26 @@ export const AddDevice = () => {
             Cancel
           </Button>
           <Button
-            onClick={() => {
+            onClick={async () => {
+              const { status } = await axios.post(
+                "http://localhost:3000/devices",
+                {
+                  system_name: systemNameInput,
+                  type: typeInput,
+                  hdd_capacity: hddCapacityInput
+                }
+              );
+              if (status === 200) {
+                const { data } = await axios("http://localhost:3000/devices");
+                setDevicesData(data);
+              }
               setOpen(false);
             }}
             color="primary"
             autoFocus
+            disabled={formValidator}
           >
-            Update
+            Add
           </Button>
         </DialogActions>
       </Dialog>
