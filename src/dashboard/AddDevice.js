@@ -5,12 +5,12 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import IconButton from "@material-ui/core/IconButton";
-import EditIcon from "@material-ui/icons/Edit";
 import TextField from "@material-ui/core/TextField";
 import { types } from "./constants";
 import MenuItem from "@material-ui/core/MenuItem";
 import styled from "styled-components";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 
 const InputRow = styled.div({
   display: "flex",
@@ -18,39 +18,44 @@ const InputRow = styled.div({
   margin: "24px 16px"
 });
 
-const TextFieldWithMargin = styled(TextField)({
+const TextFieldWithMarginAndWidth = styled(TextField)({
   "&&": {
-    marginLeft: "16px"
+    marginLeft: "16px",
+    width: "184px"
   }
 });
 
-export const EditDevice = ({ id, systemName, deviceType, hddCapacity }) => {
+export const AddDevice = () => {
   const [open, setOpen] = useState(false);
-  const [typeInput, setType] = useState(deviceType);
-  const [systemNameInput, setSystemNameInput] = useState(systemName);
-  const [hddCapacityInput, setHddCapacityInput] = useState(hddCapacity);
+  const [typeInput, setTypeInput] = useState("");
+  const [systemNameInput, setSystemNameInput] = useState("");
+  const [hddCapacityInput, setHddCapacityInput] = useState("");
 
   return (
     <>
-      <IconButton
+      <Fab
         color="primary"
         onClick={() => {
           setOpen(true);
         }}
       >
-        <EditIcon />
-      </IconButton>
+        <AddIcon />
+      </Fab>
       <Dialog
-        fullWidth
         open={open}
+        onExiting={() => {
+          setHddCapacityInput("");
+          setSystemNameInput("");
+          setTypeInput("");
+        }}
         onClose={() => {
           setOpen(false);
         }}
       >
-        <DialogTitle>{"Edit Device"}</DialogTitle>
+        <DialogTitle>{"Add Device"}</DialogTitle>
         <DialogContent>
           <InputRow>
-            <TextFieldWithMargin
+            <TextFieldWithMarginAndWidth
               required
               label="System Name"
               value={systemNameInput}
@@ -58,13 +63,13 @@ export const EditDevice = ({ id, systemName, deviceType, hddCapacity }) => {
                 setSystemNameInput(e.target.value);
               }}
             />
-            <TextFieldWithMargin
+            <TextFieldWithMarginAndWidth
               required
               label="Type"
               select
               value={typeInput}
               onChange={e => {
-                setType(e.target.value);
+                setTypeInput(e.target.value);
               }}
             >
               {Object.values(types).map(type => (
@@ -72,10 +77,10 @@ export const EditDevice = ({ id, systemName, deviceType, hddCapacity }) => {
                   {type}
                 </MenuItem>
               ))}
-            </TextFieldWithMargin>
+            </TextFieldWithMarginAndWidth>
           </InputRow>
           <InputRow>
-            <TextFieldWithMargin
+            <TextFieldWithMarginAndWidth
               required
               label="HDD Capacity (GB)"
               type="number"

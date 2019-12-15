@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { SvgIcon } from "@material-ui/core";
 import { OutsideClickHandler } from "./OutsideClickHandler";
+import { AddDevice } from "./AddDevice";
 
 const ActiveOptionsBox = styled.div({
   alignItems: "center",
@@ -50,20 +51,6 @@ const OptionsMenu = styled.div`
 const MenuOption = styled.li({
   display: "block",
   margin: "2px"
-});
-
-const AddNewDeviceButton = styled.button({
-  border: 0,
-  borderRadius: "50%",
-  boxShadow: "0 1px 15px rgba(27, 31, 35, 0.15)",
-  backgroundColor: "#66bb6a",
-  cursor: "pointer",
-  ":hover": {
-    backgroundColor: "#4caf50"
-  },
-  ":focus": {
-    outline: "none"
-  }
 });
 
 const types = {
@@ -155,15 +142,7 @@ export const ListControls = ({
         </OutsideClickHandler>
       </SortAndFilterContainer>
       <div>
-        <AddNewDeviceButton>
-          <SvgIcon>
-            {" "}
-            <path
-              fill="#FFFFFF"
-              d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
-            />
-          </SvgIcon>
-        </AddNewDeviceButton>
+        <AddDevice />
       </div>
     </ListOptions>
   );
