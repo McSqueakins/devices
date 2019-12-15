@@ -27,7 +27,7 @@ const TextFieldWithMarginAndWidth = styled(TextField)({
   }
 });
 
-export const AddDevice = ({ setDevicesData }) => {
+export const AddDevice = ({ setGetDataIndicator }) => {
   const [open, setOpen] = useState(false);
   const [typeInput, setTypeInput] = useState("");
   const [systemNameInput, setSystemNameInput] = useState("");
@@ -116,8 +116,7 @@ export const AddDevice = ({ setDevicesData }) => {
                 }
               );
               if (status === 200) {
-                const { data } = await axios("http://localhost:3000/devices");
-                setDevicesData(data);
+                setGetDataIndicator(true);
               }
               setOpen(false);
             }}

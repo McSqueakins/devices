@@ -83,7 +83,7 @@ export const Dashboard = () => {
     <div>
       <ListContainer>
         <ListControls
-          setDevicesData={setDevicesData}
+          setGetDataIndicator={setGetDataIndicator}
           deviceTypeFilter={deviceTypeFilter}
           setDeviceTypeFilter={setDeviceTypeFilter}
           sortType={sortType}
