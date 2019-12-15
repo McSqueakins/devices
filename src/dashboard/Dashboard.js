@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
+import axios from "axios";
 import { ListControls } from "./ListControls";
 import { DeleteDevice } from "./DeleteDevice";
-import { compose, prop, sortBy, toUpper, filter } from "ramda";
+import {
+  compose,
+  ascend,
+  prop,
+  sortWith,
+  sortBy,
+  toUpper,
+  filter
+} from "ramda";
 import styled from "styled-components";
 import { EditDevice } from "./EditDevice";
 import { sortOptions, types } from "./constants";
@@ -36,77 +45,81 @@ const ListItemOptionsContainer = styled.div({
   alignItems: "center"
 });
 
-const exampleData = [
-  {
-    id: "123456",
-    system_name: `${types.WINDOWS_WORKSTATION} 1`,
-    type: types.WINDOWS_WORKSTATION,
-    hdd_capacity: 1024
-  },
-  {
-    id: "234567",
-    system_name: `${types.WINDOWS_SERVER} 1`,
-    type: types.WINDOWS_SERVER,
-    hdd_capacity: 128
-  },
-  {
-    id: "345678",
-    system_name: `${types.MAC} 1`,
-    type: types.MAC,
-    hdd_capacity: 256
-  },
-  {
-    id: "456789",
-    system_name: `${types.WINDOWS_WORKSTATION} 2`,
-    type: types.WINDOWS_WORKSTATION,
-    hdd_capacity: 64
-  }
-];
-
 export const sortBySystemName = sortBy(compose(toUpper, prop("system_name")));
-export const sortByHddCapacity = sortBy(prop("hdd_capacity"));
+export const sortByHddCapacity = sortWith([
+  ascend(compose(Number, prop("hdd_capacity"))),
+  ascend(prop("system_name"))
+]);
 
 export const Dashboard = () => {
   const [deviceTypeFilter, setDeviceTypeFilter] = useState(
     types.WINDOWS_WORKSTATION
   );
   const [sortType, setSortType] = useState(sortOptions.system_name);
+  const [devicesData, setDevicesData] = useState([]);
+  const [getDataIndicator, setGetDataIndicator] = useState(true);
+  const [deviceTypeEditInput, setDeviceTypeEditInput] = useState("");
+  const [systemNameEditInput, setSystemNameEditInput] = useState("");
+  const [hddCapacityEditInput, setHddCapacityEditInput] = useState("");
+
+  useEffect(() => {
+    if (getDataIndicator) {
+      const getData = async () => {
+        const { data } = await axios("http://localhost:3000/devices");
+        setDevicesData(data);
+      };
+      getData();
+      setGetDataIndicator(false);
+    }
+  }, [getDataIndicator]);
+
   const sortedAndFilteredData = compose(
     sortType === sortOptions.hdd_capacity
       ? sortByHddCapacity
       : sortBySystemName,
     filter(device =>
-      deviceTypeFilter ? device.type === deviceTypeFilter : true
+      deviceTypeFilter ? device.type === deviceTypeFilter?.typeName : true
     )
-  )(exampleData);
+  )(devicesData);
 
   return (
     <div>
       <ListContainer>
         <ListControls
+          setGetDataIndicator={setGetDataIndicator}
           deviceTypeFilter={deviceTypeFilter}
           setDeviceTypeFilter={setDeviceTypeFilter}
           sortType={sortType}
           setSortType={setSortType}
         />
-        {sortedAndFilteredData.map(item => (
-          <ListItem key={item.id}>
-            <div>
-              <ListItemText>{item.system_name}</ListItemText>
-              <ItemType>{item.type}</ItemType>
-              <ListItemText>{`${item.hdd_capacity} GB`}</ListItemText>
-            </div>
-            <ListItemOptionsContainer>
-              <DeleteDevice />
-              <EditDevice
-                id={item.id}
-                systemName={item.system_name}
-                deviceType={item.type}
-                hddCapacity={item.hdd_capacity}
-              />
-            </ListItemOptionsContainer>
-          </ListItem>
-        ))}
+        {sortedAndFilteredData.map(device => {
+          return (
+            <ListItem key={device.id}>
+              <div>
+                <ListItemText>{device.system_name}</ListItemText>
+                <ItemType>{types[device.type].displayValue}</ItemType>
+                <ListItemText>{`${device.hdd_capacity} GB`}</ListItemText>
+              </div>
+              <ListItemOptionsContainer>
+                <DeleteDevice
+                  id={device.id}
+                  systemName={device.system_name}
+                  setGetDataIndicator={setGetDataIndicator}
+                />
+                <EditDevice
+                  device={device}
+                  setGetDataIndicator={setGetDataIndicator}
+                  setSystemNameInput={setSystemNameEditInput}
+                  systemNameInput={systemNameEditInput}
+                  setDeviceTypeInput={setDeviceTypeEditInput}
+                  deviceTypeInput={deviceTypeEditInput}
+                  setHddCapacityInput={setHddCapacityEditInput}
+                  hddCapacityInput={hddCapacityEditInput}
+                />
+              </ListItemOptionsContainer>
+            </ListItem>
+          );
+        })}
       </ListContainer>
     </div>
   );

@@ -1,7 +1,13 @@
 export const types = {
-  WINDOWS_WORKSTATION: "Windows Workstation",
-  WINDOWS_SERVER: "Windows Server",
-  MAC: "MAC"
+  WINDOWS_WORKSTATION: {
+    typeName: "WINDOWS_WORKSTATION",
+    displayValue: "Windows Worksation"
+  },
+  WINDOWS_SERVER: {
+    typeName: "WINDOWS_SERVER",
+    displayValue: "Windows Server"
+  },
+  MAC: { typeName: "MAC", displayValue: "Mac" }
 };
 
 export const sortOptions = {
