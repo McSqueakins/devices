@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
-import Button from "@material-ui/core/Button";
 import { ListControls } from "./ListControls";
 import { DeleteDevice } from "./DeleteDevice";
 import { compose, prop, sortBy, toUpper, filter } from "ramda";
 import styled from "styled-components";
+import { EditDevice } from "./EditDevice";
+import { sortOptions, types } from "./constants";
 
 const ListContainer = styled.div({
   alignContent: "center",
@@ -34,19 +35,6 @@ const ListItemOptionsContainer = styled.div({
   display: "flex",
   alignItems: "center"
 });
-
-const StyledButton = styled(Button)({ "&&": { margin: "4px" } });
-
-const types = {
-  WINDOWS_WORKSTATION: "Windows Workstation",
-  WINDOWS_SERVER: "Windows Server",
-  MAC: "MAC"
-};
-
-const sortOptions = {
-  hdd_capacity: "HDD Capacity",
-  system_name: "System Name"
-};
 
 const exampleData = [
   {
@@ -110,7 +98,12 @@ export const Dashboard = () => {
             </div>
             <ListItemOptionsContainer>
               <DeleteDevice />
-              <StyledButton color="primary">Edit</StyledButton>
+              <EditDevice
+                id={item.id}
+                systemName={item.system_name}
+                deviceType={item.type}
+                hddCapacity={item.hdd_capacity}
+              />
             </ListItemOptionsContainer>
           </ListItem>
         ))}
