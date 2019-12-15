@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+
+import Button from "@material-ui/core/Button";
 import { ListControls } from "./ListControls";
+import { DeleteDevice } from "./DeleteDevice";
 import { compose, prop, sortBy, toUpper, filter } from "ramda";
+import styled from "styled-components";
 
 const ListContainer = styled.div({
   alignContent: "center",
@@ -32,20 +35,7 @@ const ListItemOptionsContainer = styled.div({
   alignItems: "center"
 });
 
-const StyledButton = styled.button`
-  border: none;
-  background-color: ${props => (props.cta ? "#00838f" : "transparent")};
-  cursor: pointer;
-  margin: 4px;
-  padding: 4px;
-  width: 56px;
-  :hover {
-    background-color: ${props => (props.cta ? "#006064" : "#b6bab7")};
-  }
-  :focus {
-    outline: none;
-  }
-`;
+const StyledButton = styled(Button)({ "&&": { margin: "4px" } });
 
 const types = {
   WINDOWS_WORKSTATION: "Windows Workstation",
@@ -119,8 +109,8 @@ export const Dashboard = () => {
               <ListItemText>{`${item.hdd_capacity} GB`}</ListItemText>
             </div>
             <ListItemOptionsContainer>
-              <StyledButton>Delete</StyledButton>
-              <StyledButton cta>Edit</StyledButton>
+              <DeleteDevice />
+              <StyledButton color="primary">Edit</StyledButton>
             </ListItemOptionsContainer>
           </ListItem>
         ))}
