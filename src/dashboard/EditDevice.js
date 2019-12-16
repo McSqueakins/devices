@@ -46,8 +46,9 @@ export const EditDevice = ({
 
   return (
     <>
-      <IconButton
+      <Button
         color="primary"
+        variant="contained"
         onClick={() => {
           setDeviceTypeInput(device.type);
           setSystemNameInput(device.system_name);
@@ -55,8 +56,8 @@ export const EditDevice = ({
           setOpen(true);
         }}
       >
-        <EditIcon />
-      </IconButton>
+        Edit
+      </Button>
       <Dialog
         fullWidth
         open={open}

@@ -1,7 +1,7 @@
 export const types = {
   WINDOWS_WORKSTATION: {
     typeName: "WINDOWS_WORKSTATION",
-    displayValue: "Windows Worksation"
+    displayValue: "Windows Workstation"
   },
   WINDOWS_SERVER: {
     typeName: "WINDOWS_SERVER",
