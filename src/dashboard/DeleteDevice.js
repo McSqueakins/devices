@@ -15,6 +15,7 @@ export const DeleteDevice = ({ id, systemName, setGetDataIndicator }) => {
     <>
       <Button
         color="secondary"
+        variant="contained"
         onClick={() => {
           setOpen(true);
         }}

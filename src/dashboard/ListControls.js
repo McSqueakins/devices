@@ -4,15 +4,17 @@ import { SvgIcon } from "@material-ui/core";
 import { OutsideClickHandler } from "./OutsideClickHandler";
 import { AddDevice } from "./AddDevice";
 import { types, sortOptions } from "./constants";
+import Typography from "@material-ui/core/Typography";
 
 const ActiveOptionsBox = styled.div({
   alignItems: "center",
   border: "1px solid #c3c7c4",
+  borderRadius: "4px",
   cursor: "pointer",
   display: "flex",
   justifyContent: "space-between",
   position: "relative",
-  margin: "4px",
+  marginRight: "4px",
   padding: "4px"
 });
 
@@ -28,30 +30,36 @@ const SortAndFilterContainer = styled.div({
   flexDirection: "row"
 });
 
-const filterOptionsBoxWidth = 272;
+const filterOptionsBoxWidth = 288;
 const ActiveFilterOptionBox = styled(ActiveOptionsBox)({
   width: `${filterOptionsBoxWidth}px`
 });
 
-const sortOptionsBoxWidth = 192;
+const sortOptionsBoxWidth = 200;
 const ActiveSortOptionBox = styled(ActiveOptionsBox)({
   width: `${sortOptionsBoxWidth}px`
 });
 
 const OptionsMenu = styled.div`
-  background-color: #303331;
-  box-shadow: 0 1px 15px rgba(27, 31, 35, 0.15);
+  background-color: #ffffff;
+  border-left: 1px solid #c3c7c4;
+  border-right: 1px solid #c3c7c4;
+  border-bottom: 1px solid #c3c7c4;
+  border-radius: 0 0 4px 4px;
   display: block;
   position: absolute;
-  top: 32px;
-  left: 0px;
+  top: 31px;
+  left: -1px;
   width: ${props => props.width}px;
   z-index: 100;
 `;
 
 const MenuOption = styled.li({
   display: "block",
-  margin: "2px"
+  margin: "2px",
+  ":hover": {
+    backgroundColor: "#e0e0e0"
+  }
 });
 
 export const ListControls = ({
@@ -72,7 +80,9 @@ export const ListControls = ({
               setFilterMenuOpen(!filterMenuOpen);
             }}
           >
-            Device Type: {deviceTypeFilter?.displayValue ?? "All"}
+            <Typography>
+              Device Type: {deviceTypeFilter?.displayValue ?? "All"}
+            </Typography>
             <SvgIcon>
               <path
                 fill="#000000"
@@ -80,13 +90,13 @@ export const ListControls = ({
               />
             </SvgIcon>
             {filterMenuOpen && (
-              <OptionsMenu width={filterOptionsBoxWidth - 2}>
+              <OptionsMenu width={filterOptionsBoxWidth}>
                 <MenuOption
                   onClick={() => {
                     setDeviceTypeFilter(null);
                   }}
                 >
-                  All
+                  <Typography>All</Typography>
                 </MenuOption>
                 {Object.values(types).map(type => (
                   <MenuOption
@@ -95,7 +105,7 @@ export const ListControls = ({
                       setDeviceTypeFilter(type);
                     }}
                   >
-                    {type.displayValue}
+                    <Typography>{type.displayValue}</Typography>
                   </MenuOption>
                 ))}
               </OptionsMenu>
@@ -108,7 +118,7 @@ export const ListControls = ({
               setSortMenuOpen(!sortMenuOpen);
             }}
           >
-            Sort by: {sortType}
+            <Typography>Sort by: {sortType} </Typography>
             <SvgIcon>
               <path
                 fill="#000000"
@@ -116,7 +126,7 @@ export const ListControls = ({
               />
             </SvgIcon>
             {sortMenuOpen && (
-              <OptionsMenu width={sortOptionsBoxWidth - 2}>
+              <OptionsMenu width={sortOptionsBoxWidth}>
                 {Object.values(sortOptions).map(sortOption => (
                   <MenuOption
                     key={sortOption}
@@ -124,7 +134,7 @@ export const ListControls = ({
                       setSortType(sortOption);
                     }}
                   >
-                    {sortOption}
+                    <Typography>{sortOption}</Typography>
                   </MenuOption>
                 ))}
               </OptionsMenu>

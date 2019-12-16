@@ -15,34 +15,33 @@ import {
 import styled from "styled-components";
 import { EditDevice } from "./EditDevice";
 import { sortOptions, types } from "./constants";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
 
-const ListContainer = styled.div({
+const DashboardContainer = styled.div({
   alignContent: "center",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-  margin: "64px 512px"
+  margin: "64px 408px"
 });
 
-const ListItem = styled.div({
+const ListContainer = styled(Paper)({
+  height: "70vh",
+  padding: "16px",
+  overflowY: "scroll",
+  marginTop: "8px"
+});
+
+const ListItem = styled(Card)({
   backgroundColor: "#c3c7c4",
   border: "1px solid orange",
   display: "flex",
   justifyContent: "space-between",
-  margin: "4px"
-});
-
-const ListItemText = styled.p({
-  margin: "0px 2px"
-});
-
-const ItemType = styled(ListItemText)({
-  color: "#1f8aad"
-});
-
-const ListItemOptionsContainer = styled.div({
-  display: "flex",
-  alignItems: "center"
+  margin: "4px 0px"
 });
 
 export const sortBySystemName = sortBy(compose(toUpper, prop("system_name")));
@@ -52,9 +51,7 @@ export const sortByHddCapacity = sortWith([
 ]);
 
 export const Dashboard = () => {
-  const [deviceTypeFilter, setDeviceTypeFilter] = useState(
-    types.WINDOWS_WORKSTATION
-  );
+  const [deviceTypeFilter, setDeviceTypeFilter] = useState();
   const [sortType, setSortType] = useState(sortOptions.system_name);
   const [devicesData, setDevicesData] = useState([]);
   const [getDataIndicator, setGetDataIndicator] = useState(true);
@@ -84,7 +81,13 @@ export const Dashboard = () => {
 
   return (
     <div>
-      <ListContainer>
+      <DashboardContainer>
+        <Typography component="h2" variant="h3">
+          Devices
+        </Typography>
+        <Typography variant="subtitle1">
+          View, add, edit, and delete devices
+        </Typography>
         <ListControls
           setGetDataIndicator={setGetDataIndicator}
           deviceTypeFilter={deviceTypeFilter}
@@ -92,35 +95,42 @@ export const Dashboard = () => {
           sortType={sortType}
           setSortType={setSortType}
         />
-        {sortedAndFilteredData.map(device => {
-          return (
-            <ListItem key={device.id}>
-              <div>
-                <ListItemText>{device.system_name}</ListItemText>
-                <ItemType>{types[device.type].displayValue}</ItemType>
-                <ListItemText>{`${device.hdd_capacity} GB`}</ListItemText>
-              </div>
-              <ListItemOptionsContainer>
-                <DeleteDevice
-                  id={device.id}
-                  systemName={device.system_name}
-                  setGetDataIndicator={setGetDataIndicator}
-                />
-                <EditDevice
-                  device={device}
-                  setGetDataIndicator={setGetDataIndicator}
-                  setSystemNameInput={setSystemNameEditInput}
-                  systemNameInput={systemNameEditInput}
-                  setDeviceTypeInput={setDeviceTypeEditInput}
-                  deviceTypeInput={deviceTypeEditInput}
-                  setHddCapacityInput={setHddCapacityEditInput}
-                  hddCapacityInput={hddCapacityEditInput}
-                />
-              </ListItemOptionsContainer>
-            </ListItem>
-          );
-        })}
-      </ListContainer>
+        <ListContainer>
+          {sortedAndFilteredData.map(device => {
+            return (
+              <ListItem key={device.id} raised>
+                <CardContent>
+                  <Typography color="primary">{device.system_name}</Typography>
+                  <Typography color="textPrimary" variant="body2">
+                    {types[device.type].displayValue}
+                  </Typography>
+                  <Typography
+                    color="textSecondary"
+                    variant="body2"
+                  >{`${device.hdd_capacity} GB`}</Typography>
+                </CardContent>
+                <CardActions>
+                  <DeleteDevice
+                    id={device.id}
+                    systemName={device.system_name}
+                    setGetDataIndicator={setGetDataIndicator}
+                  />
+                  <EditDevice
+                    device={device}
+                    setGetDataIndicator={setGetDataIndicator}
+                    setSystemNameInput={setSystemNameEditInput}
+                    systemNameInput={systemNameEditInput}
+                    setDeviceTypeInput={setDeviceTypeEditInput}
+                    deviceTypeInput={deviceTypeEditInput}
+                    setHddCapacityInput={setHddCapacityEditInput}
+                    hddCapacityInput={hddCapacityEditInput}
+                  />
+                </CardActions>
+              </ListItem>
+            );
+          })}
+        </ListContainer>
+      </DashboardContainer>
     </div>
   );
 };
