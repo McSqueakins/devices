@@ -40,6 +40,7 @@ export const AddDevice = ({ setGetDataIndicator }) => {
     <>
       <Fab
         color="primary"
+        data-testid="add-new-device-button"
         onClick={() => {
           setOpen(true);
         }}
@@ -61,6 +62,7 @@ export const AddDevice = ({ setGetDataIndicator }) => {
         <DialogContent>
           <InputRow>
             <TextFieldWithMarginAndWidth
+              inputProps={{ "data-testid": "add-device-system-name-input" }}
               required
               label="System Name"
               value={systemNameInput}
@@ -69,6 +71,8 @@ export const AddDevice = ({ setGetDataIndicator }) => {
               }}
             />
             <TextFieldWithMarginAndWidth
+              data-testid="add-device-type"
+              inputProps={{ "data-testid": "add-device-type-input" }}
               required
               label="Type"
               select
@@ -86,6 +90,7 @@ export const AddDevice = ({ setGetDataIndicator }) => {
           </InputRow>
           <InputRow>
             <TextFieldWithMarginAndWidth
+              inputProps={{ "data-testid": "add-device-capacity-input" }}
               required
               label="HDD Capacity (GB)"
               type="number"
@@ -106,6 +111,7 @@ export const AddDevice = ({ setGetDataIndicator }) => {
             Cancel
           </Button>
           <Button
+            data-testid="add-device-submit-button"
             onClick={async () => {
               const { status } = await axios.post(
                 "http://localhost:3000/devices",
