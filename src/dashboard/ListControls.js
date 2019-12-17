@@ -76,6 +76,7 @@ export const ListControls = ({
       <SortAndFilterContainer>
         <OutsideClickHandler callBack={() => setFilterMenuOpen(false)}>
           <ActiveFilterOptionBox
+            data-testid="filter-option-dropdown"
             onClick={() => {
               setFilterMenuOpen(!filterMenuOpen);
             }}
@@ -92,6 +93,7 @@ export const ListControls = ({
             {filterMenuOpen && (
               <OptionsMenu width={filterOptionsBoxWidth}>
                 <MenuOption
+                  data-testid="filter-all"
                   onClick={() => {
                     setDeviceTypeFilter(null);
                   }}
@@ -100,6 +102,7 @@ export const ListControls = ({
                 </MenuOption>
                 {Object.values(types).map(type => (
                   <MenuOption
+                    data-testid={`filter-${type.typeName}`}
                     key={type.typeName}
                     onClick={() => {
                       setDeviceTypeFilter(type);
@@ -114,6 +117,7 @@ export const ListControls = ({
         </OutsideClickHandler>
         <OutsideClickHandler callBack={() => setSortMenuOpen(false)}>
           <ActiveSortOptionBox
+            data-testid="sort-option-dropdown"
             onClick={() => {
               setSortMenuOpen(!sortMenuOpen);
             }}

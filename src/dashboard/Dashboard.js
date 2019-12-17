@@ -100,7 +100,7 @@ export const Dashboard = () => {
             return (
               <ListItem key={device.id} raised>
                 <CardContent>
-                  <Typography color="primary">{device.system_name}</Typography>
+                  <Typography data-testid="device-name" color="primary">{device.system_name}</Typography>
                   <Typography color="textPrimary" variant="body2">
                     {types[device.type].displayValue}
                   </Typography>
